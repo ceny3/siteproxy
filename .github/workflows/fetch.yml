@@ -1,0 +1,23 @@
+name: Merge upstream branches
+on:
+  workflow_dispatch:
+  schedule:
+    - cron:  '5 * * * *'
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Merge upstream
+        run: |
+          git config --global user.name 'orzpe'
+          git config --global user.email 'orzpe@users.noreply.github.com'
+
+          git remote add upstream https://github.com/netptop/siteproxy.git
+          git fetch upstream
+
+          git checkout --track origin/master
+          git merge --no-edit upstream/master
+          git push origin master
